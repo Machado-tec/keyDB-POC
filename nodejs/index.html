@@ -6,12 +6,22 @@
 <body>
     <h1>Real-time Log of KeyDB Updates</h1>
     <div id="log">No updates yet.</div>
+    <button onclick="decreaseInterval()">Decrease Update Interval</button>
 
     <script>
         const eventSource = new EventSource('/events');
         eventSource.onmessage = function(event) {
             document.getElementById('log').innerHTML = event.data;
         };
+
+        function decreaseInterval() {
+            fetch('/decrease-interval', {
+                method: 'POST'
+            }).then(response => response.json())
+            .then(data => {
+                alert(`Update interval decreased to: ${data.interval} seconds`);
+            });
+        }
     </script>
 </body>
 </html>

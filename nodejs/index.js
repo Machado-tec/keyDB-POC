@@ -10,43 +10,39 @@ const redisClient = redis.createClient({
   port: 6379
 });
 
-// Handle connection errors
-redisClient.on('error', (err) => {
-  console.log('Redis error:', err);
-});
+// Middleware to parse JSON
+app.use(express.json());
 
-// Subscriber for keyspace notifications
-const subscriber = redisClient.duplicate();
-
-// Listen to keyspace events for the 'set' operation
-subscriber.subscribe('__keyevent@0__:set');
-
-let latestMessage = 'No updates yet'; // Store the latest message
-
-subscriber.on('message', (channel, message) => {
-  console.log(`Received message: ${message} on channel: ${channel}`);
-  redisClient.get('shared_key', (err, value) => {
+// Endpoint to handle interval decrease
+app.post('/decrease-interval', (req, res) => {
+  redisClient.get('update_interval', (err, interval) => {
     if (err) {
-      console.error('Error fetching shared_key:', err);
+      res.status(500).json({ error: 'Error retrieving interval' });
     } else {
-      latestMessage = `Updated key: ${message}, Value: ${value}`;
-      console.log(latestMessage); // Log the message for debugging
+      let newInterval = Math.max(1, parseInt(interval) - 1); // Minimum interval is 1 second
+      redisClient.set('update_interval', newInterval);
+      res.json({ interval: newInterval });
     }
   });
 });
 
-// SSE Route
+// SSE route for real-time events
 app.get('/events', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
-  
+
   // Send updates every time the shared_key is updated
   const intervalId = setInterval(() => {
-    res.write(`data: ${latestMessage}\n\n`);
+    redisClient.get('shared_key', (err, value) => {
+      if (err) {
+        console.error('Error fetching shared_key:', err);
+      } else {
+        res.write(`data: ${value}\n\n`);
+      }
+    });
   }, 1000);
 
-  // Close the connection if the client disconnects
   req.on('close', () => {
     clearInterval(intervalId);
     res.end();
@@ -62,4 +58,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Node.js app listening on port ${port}`);
 });
-
