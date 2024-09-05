@@ -89,3 +89,6 @@ This script showcases the use of asynchronous programming with KeyDB using `aior
 --- 
 
 This `README.md` focuses on explaining the asynchronous approach used in `python03/app.py` and its key role in the POC project.
+
+
+Author: **Adriano Machado**

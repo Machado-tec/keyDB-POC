@@ -93,3 +93,7 @@ This script demonstrates how to publish timestamped data to KeyDB, providing a f
 ---
 
 This `README.md` is designed to provide clear instructions and context for the purpose of the `python01/app.py` script within the larger POC project.
+
+
+
+Author: **Adriano Machado**

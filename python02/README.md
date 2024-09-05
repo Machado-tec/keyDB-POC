@@ -105,3 +105,6 @@ This script demonstrates how to listen for keyspace notifications in KeyDB, maki
 ---
 
 This `README.md` focuses on explaining the key features and use cases of the `python02/app.py` script in the larger POC project.
+
+
+Author: **Adriano Machado**
