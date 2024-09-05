@@ -14,6 +14,22 @@
   <button id="interval-btn-02">Update Interval (keydb_02): Loading...</button>
   <button id="interval-btn-03">Update Interval (keydb_03): Loading...</button>
 
+  <!-- Explanation Section -->
+  <h2>Funcionamento do Sistema</h2>
+  <p>
+    Este sistema demonstra um <strong>padrão observável</strong> utilizando KeyDB em um ambiente distribuído de replicação entre três instâncias KeyDB, com três botões interativos para controlar o intervalo de atualização de cada uma dessas instâncias.
+  </p>
+  <h3>Funcionamento:</h3>
+  <ul>
+    <li>A interface exibe três seções correspondentes a cada instância KeyDB (keydb_01, keydb_02, keydb_03). Cada seção mostra o valor da chave <code>shared_key</code> e o intervalo de atualização (<code>update_interval</code>).</li>
+    <li>Cada botão diminui o intervalo de atualização de 10 para 1 segundo e, ao atingir 1 segundo, retorna para 10. O rótulo dos botões é atualizado automaticamente.</li>
+  </ul>
+
+  <h3>O que Comprova:</h3>
+  <p>
+    Este sistema comprova o funcionamento de um <strong>cluster KeyDB em modo de replicação ativa</strong>, onde cada instância de KeyDB está sincronizada, recebendo e replicando mudanças entre si. Ele também ilustra a utilização de um padrão observável para monitorar e controlar, em tempo real, o comportamento das instâncias KeyDB.
+  </p>
+
   <script>
     const eventSource = new EventSource('/events');
     
