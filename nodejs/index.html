@@ -10,9 +10,9 @@
   <div id="log3">keydb_03: No updates yet.</div>
   
   <!-- Buttons for each KeyDB instance -->
-  <button id="interval-btn-01">Update Interval (keydb_01): 10 seconds</button>
-  <button id="interval-btn-02">Update Interval (keydb_02): 10 seconds</button>
-  <button id="interval-btn-03">Update Interval (keydb_03): 10 seconds</button>
+  <button id="interval-btn-01">Update Interval (keydb_01): Loading...</button>
+  <button id="interval-btn-02">Update Interval (keydb_02): Loading...</button>
+  <button id="interval-btn-03">Update Interval (keydb_03): Loading...</button>
 
   <script>
     const eventSource = new EventSource('/events');
@@ -28,7 +28,20 @@
       }
     };
 
-    // Handle button clicks to change the update interval for each keydb
+    // Fetch initial interval values for each KeyDB instance and update button labels
+    const updateIntervalButtonLabel = (keydb, buttonId) => {
+      fetch(`/get-interval/${keydb}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById(buttonId).textContent = `Update Interval (${keydb}): ${data.interval} seconds`;
+        });
+    };
+
+    updateIntervalButtonLabel('keydb_01', 'interval-btn-01');
+    updateIntervalButtonLabel('keydb_02', 'interval-btn-02');
+    updateIntervalButtonLabel('keydb_03', 'interval-btn-03');
+
+    // Handle button clicks to change the update interval for each KeyDB
     const intervalBtn01 = document.getElementById('interval-btn-01');
     intervalBtn01.onclick = function() {
       fetch('/change-interval/keydb_01', { method: 'POST' })

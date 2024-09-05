@@ -41,6 +41,31 @@ app.post('/change-interval/:keydb', (req, res) => {
   });
 });
 
+app.get('/get-interval/:keydb', (req, res) => {
+  let redisClient;
+  switch (req.params.keydb) {
+    case 'keydb_01':
+      redisClient = redisClient1;
+      break;
+    case 'keydb_02':
+      redisClient = redisClient2;
+      break;
+    case 'keydb_03':
+      redisClient = redisClient3;
+      break;
+    default:
+      return res.status(400).json({ error: 'Invalid KeyDB instance' });
+  }
+
+  redisClient.get('update_interval', (err, interval) => {
+    if (err) {
+      res.status(500).json({ error: 'Error retrieving interval' });
+    } else {
+      res.json({ interval: interval ? parseInt(interval) : 10 });
+    }
+  });
+});
+
 // SSE route for real-time events from keydb_01, keydb_02, and keydb_03
 app.get('/events', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
