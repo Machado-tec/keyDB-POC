@@ -1,0 +1,13 @@
+{
+  "name": "keydb-observable",
+  "version": "1.0.0",
+  "description": "Node.js service to connect to KeyDB and show logs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "redis": "^3.1.2"
+  }
+}

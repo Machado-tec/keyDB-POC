@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KeyDB Log</title>
+</head>
+<body>
+    <h1>Real-time Log of KeyDB Updates</h1>
+    <div id="log">No updates yet.</div>
+
+    <script>
+        const eventSource = new EventSource('/events');
+        eventSource.onmessage = function(event) {
+            document.getElementById('log').innerHTML = event.data;
+        };
+    </script>
+</body>
+</html>

@@ -79,6 +79,19 @@ services:
     networks:
       - keydb-network
 
+  nodejs_service:
+    image: node:14
+    container_name: nodejs_service
+    volumes:
+      - ./nodejs:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "npm install && npm start"
+    ports:
+      - "8888:80"
+    networks:
+      - keydb-network
+    restart: always 
+
 networks:
   keydb-network:
     driver: bridge
