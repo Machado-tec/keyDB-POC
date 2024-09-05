@@ -8,10 +8,12 @@ services:
       --multi-master yes
       --active-replica yes
       --notify-keyspace-events KEA  
+      --replicaof keydb_02 6379
+      --replicaof keydb_03 6379
     networks:
       - keydb-network
-    # ports:
-    #   - 6379:6379
+    ports:
+      - 63790:6379
 
 
   keydb_02:
@@ -22,10 +24,14 @@ services:
       --active-replica yes
       --notify-keyspace-events KEA  
       --replicaof keydb_01 6379
+      --replicaof keydb_03 6379
     depends_on:
       - keydb_01
     networks:
       - keydb-network
+    ports:
+      - 63791:6379
+
 
   keydb_03:
     image: eqalpha/keydb
@@ -35,10 +41,15 @@ services:
       --active-replica yes
       --notify-keyspace-events KEA  
       --replicaof keydb_01 6379
+      --replicaof keydb_02 6379
+
     depends_on:
       - keydb_01
     networks:
       - keydb-network
+    ports:
+      - 63792:6379
+
 
   python01:
     image: python:3.9-slim

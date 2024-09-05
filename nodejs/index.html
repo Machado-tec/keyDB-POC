@@ -9,7 +9,10 @@
   <div id="log2">keydb_02: No updates yet.</div>
   <div id="log3">keydb_03: No updates yet.</div>
   
-  <button id="interval-btn">Update Interval: 10 seconds</button>
+  <!-- Buttons for each KeyDB instance -->
+  <button id="interval-btn-01">Update Interval (keydb_01): 10 seconds</button>
+  <button id="interval-btn-02">Update Interval (keydb_02): 10 seconds</button>
+  <button id="interval-btn-03">Update Interval (keydb_03): 10 seconds</button>
 
   <script>
     const eventSource = new EventSource('/events');
@@ -25,13 +28,31 @@
       }
     };
 
-    // Handle the button click to change the update interval
-    const intervalBtn = document.getElementById('interval-btn');
-    intervalBtn.onclick = function() {
-      fetch('/decrease-interval', { method: 'POST' })
+    // Handle button clicks to change the update interval for each keydb
+    const intervalBtn01 = document.getElementById('interval-btn-01');
+    intervalBtn01.onclick = function() {
+      fetch('/change-interval/keydb_01', { method: 'POST' })
         .then(response => response.json())
         .then(data => {
-          intervalBtn.textContent = `Update Interval: ${data.newInterval} seconds`;
+          intervalBtn01.textContent = `Update Interval (keydb_01): ${data.newInterval} seconds`;
+        });
+    };
+
+    const intervalBtn02 = document.getElementById('interval-btn-02');
+    intervalBtn02.onclick = function() {
+      fetch('/change-interval/keydb_02', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          intervalBtn02.textContent = `Update Interval (keydb_02): ${data.newInterval} seconds`;
+        });
+    };
+
+    const intervalBtn03 = document.getElementById('interval-btn-03');
+    intervalBtn03.onclick = function() {
+      fetch('/change-interval/keydb_03', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          intervalBtn03.textContent = `Update Interval (keydb_03): ${data.newInterval} seconds`;
         });
     };
   </script>
