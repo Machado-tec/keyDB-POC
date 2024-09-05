@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  keydb_01:
+    image: eqalpha/keydb
+    container_name: keydb_01
+    command: >
+      --multi-master yes
+      --active-replica yes
+      --notify-keyspace-events KEA  
+    networks:
+      - keydb-network
+    # ports:
+    #   - 6379:6379
+
+
+  keydb_02:
+    image: eqalpha/keydb
+    container_name: keydb_02
+    command: >
+      --multi-master yes
+      --active-replica yes
+      --notify-keyspace-events KEA  
+      --replicaof keydb_01 6379
+    depends_on:
+      - keydb_01
+    networks:
+      - keydb-network
+
+  keydb_03:
+    image: eqalpha/keydb
+    container_name: keydb_03
+    command: >
+      --multi-master yes
+      --active-replica yes
+      --notify-keyspace-events KEA  
+      --replicaof keydb_01 6379
+    depends_on:
+      - keydb_01
+    networks:
+      - keydb-network
+
+  python01:
+    image: python:3.9-slim
+    container_name: python01
+    volumes:
+      - ./python01:/usr/src/app
+    depends_on:
+      - keydb_01
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash -c "sleep 5 && pip install redis && python /usr/src/app/app.py"
+    networks:
+      - keydb-network
+
+  python02:
+    image: python:3.9-slim
+    container_name: python02
+    volumes:
+      - ./python02:/usr/src/app
+    depends_on:
+      - keydb_02
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash -c "pip install redis && python /usr/src/app/app.py"
+    networks:
+      - keydb-network
+
+  python03:
+    image: python:3.9-slim
+    container_name: python03
+    volumes:
+      - ./python02:/usr/src/app
+    depends_on:
+      - keydb_03
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash -c "pip install redis && python /usr/src/app/app.py"
+    networks:
+      - keydb-network
+
+networks:
+  keydb-network:
+    driver: bridge
