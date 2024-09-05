@@ -44,8 +44,8 @@ In this POC, **Python01** writes a shared timestamp to KeyDB, and **Python02** a
 1. Clone the repository:
 
    ```bash
-   git clone xxxx.git
-   cd keydb-docker-observable-poc
+   git clone git@github.com:Machado-tec/keyDB-POC.git
+   cd keyDB-POC
    ```
 
 2. Build and start the services using Docker Compose:
